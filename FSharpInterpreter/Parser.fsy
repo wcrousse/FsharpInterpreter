@@ -1,0 +1,33 @@
+﻿
+%{
+  (* File Pararser.fsy
+     Parser specification for simplified F#
+   *)
+
+  open FSharpInterpreter.AbstractSyntax
+%}
+
+%token <int> NUM
+%token <string> ID
+%token PLUS MINUS TIMES DIVIDE
+%token LPARN RPARN STARTBLOCK ENDBLOCK
+%token EOF
+
+%left MINUS PLUS
+%left TIMES DIVIDE
+
+%start Main
+%type <FSharpInterpreter.AbstractSyntax.Expression> Main
+
+%%
+
+Main:
+    Expression EOF { $1 }
+
+Expression:
+	| NUM { IntLiteral $1 }
+    | LPARN Expression RPARN { $2 }
+    | Expression PLUS Expression { PrimitiveOperation("+", $1, $3) }
+    | Expression MINUS Expression { PrimitiveOperation("-", $1, $3) }
+    | Expression TIMES Expression { PrimitiveOperation("*", $1, $3) }
+	| Expression DIVIDE Expression { PrimitiveOperation("/", $1, $3) }
