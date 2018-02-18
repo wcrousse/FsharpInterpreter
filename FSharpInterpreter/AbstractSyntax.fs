@@ -1,5 +1,6 @@
 ﻿namespace FSharpInterpreter
 
 module AbstractSyntax =
-
-    type Expression = int
+    type Expression =
+        | IntLiteral of int
+        | PrimitiveOperation of string * Expression * Expression
